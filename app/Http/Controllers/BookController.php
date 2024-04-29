@@ -13,12 +13,12 @@ class BookController extends Controller
         return view('index');
     }
 
-    function insert_form()
+    function create()
     {
         return view('insert');
     }
 
-    function insert(BookRequest $request)
+    function store(BookRequest $request)
     {
         $input = $request->all();
         if ($request->has('cover')) {
@@ -30,7 +30,7 @@ class BookController extends Controller
         }
         $input += array('cover' => $filename);
         Book::create($input);
-        return redirect()->to('/')->with('insertSuccess', 'true');
+        return redirect()->to('/book')->with('insertSuccess', 'true');
     }
 
     function get_data()
@@ -39,15 +39,13 @@ class BookController extends Controller
         return response()->json(['data' => $book]);
     }
 
-    function edit($id)
+    function show(Book $book)
     {
-        $book = Book::find($id);
         return view("edit", compact('book'));
     }
-    function update(BookRequest $request, $id)
+    function update(BookRequest $request, Book $book)
     {
         $input = $request->all();
-        $book = Book::find($id);
         if ($request->has('cover')) {
             unlink(public_path('storage/img/') . $book->cover);
             $filename = $request->get('cover');
@@ -57,7 +55,7 @@ class BookController extends Controller
             );
         }
         $book->update($input);
-        return redirect()->to('/')->with('updateSuccess', 'true');
+        return redirect()->to('/book')->with('updateSuccess', 'true');
     }
 
     function search($keyword)
@@ -70,10 +68,9 @@ class BookController extends Controller
         return response()->json(['data' => $data]);
     }
 
-    function delete($id) {
-        $book = Book::find($id);
+    function destroy(Book $book) {
         unlink(public_path('storage/img/') . $book->cover);
         $book->delete();
-        return redirect()->to('/')->with('deleteMessage','true');
+        return redirect()->to('/book')->with('deleteMessage','true');
     }
 }

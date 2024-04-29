@@ -27,11 +27,6 @@
          * FilePond Initialization
          */
         const inputElement = document.querySelector('input[type="file"]');
-        // FilePond.registerPlugin(
-        //     FilePondPluginImageExifOrientation,
-        //     FilePondPluginImagePreview,
-        // );
-        // const edit = document.getElementsByName
         FilePond.registerPlugin(
             FilePondPluginImageExifOrientation,
             FilePondPluginImagePreview,

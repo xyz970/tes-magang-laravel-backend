@@ -79,7 +79,7 @@
         }).then((result) => {
             if (result.value) {
                 // console.log(`${id}`);
-                window.location.href = 'edit/' + id;
+                window.location.href = 'book/' + id;
                 // console.log(id);
             }
         })
@@ -98,7 +98,7 @@
         }).then((result) => {
             if (result.value) {
                 // console.log(`${id}`);
-                window.location.href = 'delete/' + id;
+                window.location.href = 'book/' + id;
                 // console.log(id);
             }
         })
@@ -157,16 +157,23 @@
                     name: 'Actions',
                     sort: 0,
                     width: '40%',
-                    formatter: (_, row, ) => gridjs.html(
-                        `<div class="inline-flex">
+                    formatter: (_, row, ) => {
+                        let url = `{{ route('book.destroy', ['book' => ':book']) }}`;
+                        return gridjs.html(
+                            `<div class="inline-flex">
   <button class="text-white bg-blue-700 hover:bg-blue-600 font-bold py-2 px-4 rounded-l" onclick="edit('${row.cells[1].data}')">
     Edit
   </button>
-  <button class="text-white bg-red-700 hover:bg-red-600 font-bold py-2 px-4 rounded-r" onclick="hapus('${row.cells[1].data}')">
+  <form action="${url.replace(':book',row.cells[1].data)}" method="post">
+    @method('DELETE')
+    @csrf
+    <button class="text-white bg-red-700 hover:bg-red-600 font-bold py-2 px-4 rounded-r" type="submit">
     Hapus
   </button>
-</div>`),
-
+</form>
+  
+</div>`)
+                    }
                 }
             ],
             className: {
@@ -205,7 +212,8 @@
             server: {
                 url: "{{ route('book_data') }}",
                 then: data => data.data.map(book => [
-                    count++, book.id, book.cover, book.title, book.author, book.publisher, book.country,
+                    count++, book.id, book.cover, book.title, book.author, book.publisher, book
+                    .country,
                     book
                     .publish_date, book.desc, book.status
                 ]),
