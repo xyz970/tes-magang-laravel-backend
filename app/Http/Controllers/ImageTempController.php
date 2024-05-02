@@ -19,8 +19,9 @@ class ImageTempController extends Controller
         return response()->json(['Gagal'], 500);
     }
 
-    public function delete($filename)
+    public function delete(Request $request,$filename = '')
     {
-        unlink(public_path('storage/img/temporary/') . $filename);
+        // dd($request->getContent());
+        unlink(public_path('storage/img/temporary/') . $request->getContent());
     }
 }

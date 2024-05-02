@@ -76,9 +76,9 @@ return [
         'array'   => 'Kolom harus tidak lebih dari :value anggota.',
     ],
     'max' => [
-        'numeric' => 'Kolom maskimal bernilai :max.',
+        'numeric' => 'Kolom maksimal bernilai :max.',
         'file'    => 'Kolom maksimal berukuran :max kilobita.',
-        'string'  => 'Kolom maskimal berisi :max karakter.',
+        'string'  => 'Kolom maksimal berisi :max karakter.',
         'array'   => 'Kolom maksimal terdiri dari :max anggota.',
     ],
     'mimes'     => 'Kolom harus berupa berkas berjenis: :values.',

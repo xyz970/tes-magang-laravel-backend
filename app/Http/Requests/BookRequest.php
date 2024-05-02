@@ -23,7 +23,7 @@ class BookRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'=>'required', 
+            'title'=>'required|string|max:100', 
             'author'=>'required',
             'publisher'=>'required', 
             'country'=>['required',new CountryRule], 

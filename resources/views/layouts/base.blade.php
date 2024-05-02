@@ -94,9 +94,11 @@
          * GridJs Initialization
          */
         new gridjs.Grid({
-            columns: [{
+            columns: [
+                {
                     name: "ID",
                     sort: 0,
+                    hidden:true,
                 },
                 {
                     name: "id",
@@ -187,15 +189,25 @@
             resizable: true,
             sort: true,
             pagination: {
-
                 enabled: true,
-                limit: 10,
+                limit: 5,
+                // page:1,
+                server: {
+                    url: (prev, page, limit) =>{
+                        // count = 1
+                        if (page+1 > page) {
+                            count -= page
+                        }
+                        return `${prev}/sort?offset=${page*limit}&limit=${limit}&page=${page+1}`
+                    },
+                },
 
             },
             server: {
                 url: "{{ route('book_data') }}",
                 then: data => data.data.map(book => [
-                    count++, book.id, book.cover, book.title, book.author, book.publisher, book
+                    count++, 
+                    book.id, book.cover, book.title, book.author, book.publisher, book
                     .country,
                     book
                     .publish_date, book.desc, book.status

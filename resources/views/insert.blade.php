@@ -79,8 +79,13 @@
                         Deskripsi
                     </label>
                     <textarea name="desc" id="editor"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-indigo-700 focus:outline-none focus:bg-white"></textarea>
-                </div>
+                        class="@error('desc') border-red-500 @enderror shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-indigo-700 focus:outline-none focus:bg-white"></textarea>
+                        @error('desc')
+                        <span class="mt-2 text-sm text-red-500 ">
+                            {{$message}}
+                        </span>
+                        @enderror
+                    </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">
                         Status
@@ -101,7 +106,7 @@
                         type="file">
                 </div>
                 <div class="flex items-center justify-start">
-                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">
+                    <button disabled id="btn-submit" class="bg-blue-500 disabled:bg-blue-300 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">
                         Simpan
                     </button>
                     <div class="px-6">
@@ -115,4 +120,86 @@
             </form>
         </div>
     </section>
+@endsection
+
+@section('script')
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        tinymce.init({
+            selector: '#editor',
+            height: 500,
+            plugins: [
+                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                'insertdatetime', 'media', 'table', 'help', 'wordcount', 'save'
+            ],
+            toolbar: 'undo redo | blocks | ' +
+                'bold italic backcolor | alignleft aligncenter ' +
+                'alignright alignjustify | bullist numlist outdent indent | ' +
+                'removeformat | help' +
+                'save',
+            // plugin_preview_height : "1056",
+            plugin_preview_width: "50%",
+            content_css: ''
+        });
+    });
+
+    /*
+     * FilePond Initialization
+     */
+    const inputElement = document.querySelector('input[type="file"]');
+    FilePond.registerPlugin(
+        FilePondPluginImageExifOrientation,
+        FilePondPluginImagePreview,
+        FilePondPluginFileValidateType,
+    );
+    let pond = FilePond.create(
+        inputElement, {
+            acceptedFileTypes: ['image/jpeg', 'image/png', 'image/jpg'],
+            labelFileProcessingComplete: `Upload Berhasil`,
+            labelTapToUndo: `ketuk untuk membatalkan`,
+            labelTapToCancel: `ketuk untuk membatalkan`,
+            labelFileProcessingError: `Gagal Memproses`,
+            labelTapToRetry: `ketuk untuk coba lagi`,
+            labelFileProcessing: `Sedang memproses`,
+            labelIdle: `Seret dan tempel atau <span class="filepond--label-action">Pilih dokumen</span>`,
+            labelInvalidField: 'File tidak didukung',
+            labelFileTypeNotAllowed: 'File Gambar tidak valid',
+            fileValidateTypeLabelExpectedTypes: 'File harus berekstensi .jpeg/.jpg atau .png',
+            credits: false,
+        });
+    var value = document.getElementsByClassName('filepond--data');
+
+    const file = pond.files;
+    pond.setOptions({
+        server: {
+            process: {
+                url: "{{ route('image_temp_store') }}",
+                //    onload: (response) =>{
+                //     if (response) {
+                //         // const btn = document.get
+                //         document.getElementById('btn-submit').removeAttribute("disabled");
+                //     }
+                //    }
+            },
+            revert: {
+                url: "{{ route('image_temp_delete') }}",
+                // method: 'GET',
+            },
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            }
+        }
+    });
+
+    pond.on('processfileprogress', (file, progress) => {
+        if (progress == 1) {
+            document.getElementById('btn-submit').removeAttribute("disabled");
+        }
+    });
+    pond.on('processfilerevert', (file) => {
+            document.getElementById('btn-submit').setAttribute("disabled","true");
+    });
+
+</script>
 @endsection

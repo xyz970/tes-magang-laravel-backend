@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BookRequest;
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
@@ -68,9 +69,25 @@ class BookController extends Controller
         return response()->json(['data' => $data]);
     }
 
-    function destroy(Book $book) {
+    function destroy(Book $book)
+    {
         unlink(public_path('storage/img/') . $book->cover);
         $book->delete();
-        return redirect()->to('/book')->with('deleteMessage','true');
+        return redirect()->to('/book')->with('deleteMessage', 'true');
+    }
+
+    function sort(Request $request)
+    {
+        $page = $request->get('page');
+        // dd($page);
+        $offset = $request->get('offset');
+        $page_count = 10;
+        $dataCount = Book::count();
+
+        $data = DB::table('books')
+            ->skip($offset)
+            ->take(5)
+            ->forPage($page, 5)->get();
+        return response()->json(['data' => $data, 'count' => $dataCount]);
     }
 }
