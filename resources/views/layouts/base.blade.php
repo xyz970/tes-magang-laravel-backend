@@ -85,24 +85,7 @@
         })
     }
 
-    function hapus(id) {
-        Swal.fire({
-            title: 'Hapus?',
-            text: "Apakah anda yakin ingin menghapus data ini?",
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            cancelButtonText: 'Batal',
-            confirmButtonText: 'Ya'
-        }).then((result) => {
-            if (result.value) {
-                // console.log(`${id}`);
-                window.location.href = 'book/' + id;
-                // console.log(id);
-            }
-        })
-    }
+
 
     let table = document.getElementById('table');
     count = 1;
@@ -164,10 +147,10 @@
   <button class="text-white bg-blue-700 hover:bg-blue-600 font-bold py-2 px-4 rounded-l" onclick="edit('${row.cells[1].data}')">
     Edit
   </button>
-  <form action="${url.replace(':book',row.cells[1].data)}" method="post">
+  <form onsubmit="return confirm('Apakah anda yakin ingin menghapus data ini?');" action="${url.replace(':book',row.cells[1].data)}" method="post">
     @method('DELETE')
     @csrf
-    <button class="text-white bg-red-700 hover:bg-red-600 font-bold py-2 px-4 rounded-r" type="submit">
+    <button class="text-white bg-red-700 hover:bg-red-600 font-bold py-2 px-4 rounded-r" id="submit">
     Hapus
   </button>
 </form>
