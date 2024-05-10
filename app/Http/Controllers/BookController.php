@@ -46,7 +46,7 @@ class BookController extends Controller
     }
     function update(BookRequest $request, Book $book)
     {
-        $input = $request->all();
+        $input = $request->validated();
         if ($request->has('cover')) {
             unlink(public_path('storage/img/') . $book->cover);
             $filename = $request->get('cover');
@@ -54,6 +54,7 @@ class BookController extends Controller
                 public_path() . '/storage/img/temporary/' . $filename,
                 public_path() . '/storage/img/' . $filename,
             );
+            $input += array('cover' => $filename);
         }
         $book->update($input);
         return redirect()->to('/book')->with('updateSuccess', 'true');

@@ -5,6 +5,9 @@
             <div class="py-8 ">
                 <h2 class="font-bold text-2xl">Edit Data</h2>
             </div>
+            @if($errors->any())
+{{ implode('', $errors->all('<div>:message</div>')) }}
+@endif
 
             <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" enctype="multipart/form-data" method="POST"
                 action="{{ route('book.update', ['book' => $book->id]) }}">
@@ -185,12 +188,12 @@
                 labelFileTypeNotAllowed: 'File Gambar tidak valid',
                 fileValidateTypeLabelExpectedTypes: 'File harus berekstensi .jpeg/.jpg atau .png',
                 credits: false,
-                files: [{
-                    source: `{{ asset('storage/img').'/'.$book->cover }}`,
-                    // options: {
-                    //     type: 'local',
-                    // },
-                }],
+                // files: [{
+                //     source: `{{ asset('storage/img').'/'.$book->cover }}`,
+                //     // options: {
+                //     //     type: 'local',
+                //     // },
+                // }],
             });
         var value = document.getElementsByClassName('filepond--data');
 

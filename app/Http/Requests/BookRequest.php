@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Rules\CountryRule;
+use App\Rules\StatusRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class BookRequest extends FormRequest
@@ -24,12 +25,12 @@ class BookRequest extends FormRequest
     {
         return [
             'title'=>'required|string|max:100', 
-            'author'=>'required',
-            'publisher'=>'required', 
+            'author'=>'required|string|max:50',
+            'publisher'=>'required|string|max:50', 
             'country'=>['required',new CountryRule], 
-            'publish_date'=>'required', 
+            'publish_date'=>'required|numeric', 
             'desc'=>'required', 
-            'status'=>'required',
+            'status'=>['required'],
         ];
     }
 }

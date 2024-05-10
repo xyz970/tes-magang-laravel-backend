@@ -1,5 +1,6 @@
 <?php
 
+use App\Services\CustomLoggingFormatter;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
@@ -71,6 +72,7 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
             'days' => 14,
             'replace_placeholders' => true,
+            'formatter'=>CustomLoggingFormatter::class
         ],
 
         'slack' => [

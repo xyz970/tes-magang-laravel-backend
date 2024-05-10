@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\ImageTempController;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,3 +29,7 @@ Route::resource('book', BookController::class);
 Route::post('image/temp/store',[ImageTempController::class,'store'])->name('image_temp_store');
 // Route::get('image/temp/delete/{filename?}',[ImageTempController::class,'delete'])->name('image_temp_delete');
 Route::delete('image/temp/delete',[ImageTempController::class,'delete'])->name('image_temp_delete');
+
+Route::get('/log',function(){
+    Log::channel('daily')->info('Hello World..');
+});
